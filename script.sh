@@ -1,14 +1,15 @@
 #!/bin/bash
 
-# 업데이트 및 패키지 목록 갱신
+# 업데이트 및 패키지 설치
 sudo apt update
+sudo apt install -y lxde lightdm
 
-# LXDE 및 필요한 패키지 설치
-sudo apt install --no-install-recommends lxde lightdm
-
-# xsession 파일 생성
-echo "lxsession -s LXDE" | sudo tee /etc/X11/default-display-manager > /dev/null
+# .xsession 파일 생성
 echo "lxsession -s LXDE" > ~/.xsession
-sudo chmod +x ~/.xsession
+chmod +x ~/.xsession
+
+# LightDM 활성화 및 재설정
+sudo systemctl enable lightdm
+sudo dpkg-reconfigure lightdm
 
 echo "TASK FINISH SUCCESSFULLY."
