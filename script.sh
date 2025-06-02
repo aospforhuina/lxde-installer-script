@@ -1,15 +1,22 @@
 #!/bin/bash
 
-# 업데이트 및 패키지 설치
-sudo apt update
-sudo apt install -y lxde lightdm
+# Exit on error
+set -e
 
-# .xsession 파일 생성
-echo "lxsession -s LXDE" > ~/.xsession
-chmod +x ~/.xsession
+echo "Updating packages..."
+sudo apt update && sudo apt upgrade -y
 
-# LightDM 활성화 및 재설정
-sudo systemctl enable lightdm
-sudo dpkg-reconfigure lightdm
+echo "Installing Xorg (display server)..."
+sudo apt install -y xorg xinit x11-utils
 
-echo "TASK FINISH SUCCESSFULLY."
+echo "Installing minimal LXQt desktop..."
+sudo apt install -y lxqt-core openbox pcmanfm-qt qterminal
+
+echo "Installing optional lightweight extras..."
+sudo apt install -y lxappearance lxtask gvfs network-manager-gnome
+
+echo "Creating .xinitrc to use startx with LXQt..."
+echo "exec startlxqt" > ~/.xinitrc
+
+echo "LXQt installation complete."
+echo "Reboot and log in, then run: startx"
